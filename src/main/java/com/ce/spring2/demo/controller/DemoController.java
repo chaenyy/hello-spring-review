@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -93,6 +94,15 @@ public class DemoController {
 	
 	@Autowired
 	private DemoService demoService;
+	
+	@ModelAttribute("common")
+	public Model common(Model model) {
+		log.debug("@ModelAttribute - common 호출!");
+		model.addAttribute("email", "honggd@abc.com");
+		model.addAttribute("tel", "010-1234-1234");
+		
+		return model;
+	}
 	
 	/**
 	 * value : path에 대한 별칭

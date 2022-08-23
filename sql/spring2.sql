@@ -54,5 +54,10 @@ insert into spring2.member values ('admin','1234','관리자','F',to_date('90-12
 commit;
 
 select * from member;
-delete from member where member_id = 'chany';
+delete from member where member_id = 'honggd';
+commit;
+
+update member set password = '$2a$12$6B.P2BndwvYrNwX0N6L96O6zfMq5yGpDzY6wK9Hl/.6R.0Ibl05P6' where member_id = 'abcde';
+update member set password = '$2a$12$iI7usZkZemHKmK7akM8CE.eDjFumf7sDm5KCw8lpu14gD9GuilxwK' where member_id = 'qwerty';
+update member set password = '$2a$12$nKwgZQiaHGfwfrMEcZydSuPFymIOw0OjeDA9L0Jc5RVOBOCTpi6sG' where member_id = 'admin';
 commit;
