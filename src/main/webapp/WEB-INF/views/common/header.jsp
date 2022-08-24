@@ -56,6 +56,7 @@
                             <a class="dropdown-item" href="${pageContext.request.contextPath}/demo/devList.do">Dev 목록</a>
                         </div>
 				    </li>
+				    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/todo/todoList.do">Todo</a></li>
 			    </ul>
 			    <c:if test="${empty loginMember}">
 				    <button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick="location.href='${pageContext.request.contextPath}/member/memberLogin.do';">로그인</button>

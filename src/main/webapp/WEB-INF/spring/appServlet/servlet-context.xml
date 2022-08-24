@@ -23,6 +23,18 @@
 	
 	<context:component-scan base-package="com.ce.spring2" />
 	
-	
+	<!-- #8 interceptor 등록 -->
+	<interceptors>
+		<interceptor>
+			<mapping path="/**"/> <!-- 모든 요청 의미 -->
+			<beans:bean id="logInterceptor" class="com.ce.spring2.common.interceptor.LogInterceptor"></beans:bean>
+		</interceptor>
+		
+		<interceptor>
+			<mapping path="/member/memberDetail.do"/>
+			<mapping path="/member/memberUpdate.do"/>
+			<beans:bean id="loginInterceptor" class="com.ce.spring2.common.interceptor.LoginInterceptor"></beans:bean>
+		</interceptor>
+	</interceptors>
 	
 </beans:beans>

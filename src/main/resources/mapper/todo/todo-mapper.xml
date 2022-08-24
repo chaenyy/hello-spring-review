@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ce.spring2.todo.model.dao.TodoDao">
+  <update id="updateTodo">
+  	update 
+  		todo
+  	set
+  		completed_at = 
+  		<if test="isCompleted">
+  			sysdate
+  		</if>
+  		<if test="!isCompleted">
+  			null
+  		</if>
+  	where
+  		no = #{no}
+  </update>
+</mapper>
