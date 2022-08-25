@@ -61,3 +61,42 @@ update member set password = '$2a$12$6B.P2BndwvYrNwX0N6L96O6zfMq5yGpDzY6wK9Hl/.6
 update member set password = '$2a$12$iI7usZkZemHKmK7akM8CE.eDjFumf7sDm5KCw8lpu14gD9GuilxwK' where member_id = 'qwerty';
 update member set password = '$2a$12$nKwgZQiaHGfwfrMEcZydSuPFymIOw0OjeDA9L0Jc5RVOBOCTpi6sG' where member_id = 'admin';
 commit;
+
+-- todo 테이블 생성
+create table todo(
+    no number,
+    todo varchar2(2000) not null,
+    created_at date default sysdate,
+    completed_at date,
+    constraint pk_todo_no primary key(no)
+);
+
+create sequence seq_todo_no;
+
+insert into todo values(seq_todo_no.nextval, '우산 청소하기', default, null);
+insert into todo values(seq_todo_no.nextval, '형광등 교체', default, null);
+insert into todo values(seq_todo_no.nextval, '장 보기', default, null);
+insert into todo values(seq_todo_no.nextval, '차에 물 퍼내기', default, null);
+
+select * from todo;
+
+update todo set completed_at = sysdate where no = 4;
+update todo set completed_at = sysdate where no = 2;
+commit;
+
+select * from todo;
+
+select * from todo order by decode(completed_at, null, 1), completed_at desc;
+
+select
+    *
+from
+    todo
+order by
+    (case when completed_at is null then 1 end), completed_at desc;
+    
+select * from (select * from todo where completed_at is null order by no)
+union all
+select * from (select * from todo where completed_at is not null order by completed_at desc);
+
+select * from todo order by completed_at desc nulls first, no;

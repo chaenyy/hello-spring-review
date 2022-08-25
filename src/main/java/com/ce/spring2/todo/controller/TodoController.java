@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ce.spring2.todo.model.dto.Todo;
 import com.ce.spring2.todo.model.service.TodoService;
+import com.ce.spring2.todo.model.service.TodoServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,11 +28,16 @@ public class TodoController {
 	private TodoService todoService;
 	
 	@GetMapping("/todoList.do")
-	public void todoList(Model model) {
+	public ModelAndView todoList(ModelAndView mav) {
 		try {
+			// new TodoServiceImpl()
+//			log.debug("todoService = {}", new TodoServiceImpl().getClass());
+//			log.debug("todoService = {}", todoService.getClass());
+			
 			List<Todo> list = todoService.selectAllTodo();
-			log.debug("list = {}", list);
-			model.addAttribute("list", list);
+			mav.addObject("list", list);
+			
+			return mav;
 		} catch(Exception e) {
 			log.error(e.getMessage(), e);
 			throw e;

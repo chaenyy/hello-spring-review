@@ -41,6 +41,12 @@
 			<artifactId>aspectjrt</artifactId>
 			<version>${org.aspectj-version}</version>
 		</dependency>	
+		<!-- #9. AOP관련 의존 추가 -->
+	    <dependency>
+	        <groupId>org.aspectj</groupId>
+	        <artifactId>aspectjweaver</artifactId>
+	        <version>${org.aspectj-version}</version>
+	    </dependency>
 		
 		<!-- Logging -->
 		<dependency>
