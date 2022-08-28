@@ -29,47 +29,32 @@ public class TodoController {
 	
 	@GetMapping("/todoList.do")
 	public ModelAndView todoList(ModelAndView mav) {
-		try {
-			// new TodoServiceImpl()
+		// new TodoServiceImpl()
 //			log.debug("todoService = {}", new TodoServiceImpl().getClass());
 //			log.debug("todoService = {}", todoService.getClass());
-			
-			List<Todo> list = todoService.selectAllTodo();
-			mav.addObject("list", list);
-			
-			return mav;
-		} catch(Exception e) {
-			log.error(e.getMessage(), e);
-			throw e;
-		}
+		
+		List<Todo> list = todoService.selectAllTodo();
+		mav.addObject("list", list);
+		
+		return mav;
 	}
 	
 	@PostMapping("/insertTodo.do")
 	public String insertTodo(Todo todo, RedirectAttributes redirectAttr) {
-		try {
-			int result = todoService.insertTodo(todo);
-			redirectAttr.addFlashAttribute("msg", "할일을 추가하였습니다.");
-			
-			return "redirect:/todo/todoList.do";
-		} catch(Exception e) {
-			log.error(e.getMessage(), e);
-			throw e;
-		}
+		int result = todoService.insertTodo(todo);
+		redirectAttr.addFlashAttribute("msg", "할일을 추가하였습니다.");
+	
+		return "redirect:/todo/todoList.do";
 	}
 	
 	@PostMapping("/updateTodo.do")
 	public String updateTodo(@RequestParam int no, @RequestParam boolean isCompleted) {
-		try {
-			Map<String, Object> param = new HashMap<>();
-			param.put("no", no);
-			param.put("isCompleted", isCompleted);
-			
-			int result = todoService.updateTodo(param);
-			
-			return "redirect:/todo/todoList.do";
-		} catch(Exception e) {
-			log.error(e.getMessage(), e);
-			throw e;
-		}
+		Map<String, Object> param = new HashMap<>();
+		param.put("no", no);
+		param.put("isCompleted", isCompleted);
+		
+		int result = todoService.updateTodo(param);
+		
+		return "redirect:/todo/todoList.do";
 	}
 }
