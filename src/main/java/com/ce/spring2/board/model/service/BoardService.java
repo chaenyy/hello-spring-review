@@ -9,4 +9,8 @@ public interface BoardService {
 
 	List<Board> selectAll(Map<String, Integer> param);
 
+	int getTotalContent();
+
+	int insertBoard(Board board);
+
 }

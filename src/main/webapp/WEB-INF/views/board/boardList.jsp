@@ -11,7 +11,8 @@
 input#btn-add{float:right; margin: 0 0 15px;}
 </style>
 <section id="board-container" class="container">
-	<input type="button" value="글쓰기" id="btn-add" class="btn btn-outline-success"/>
+	<input type="button" value="글쓰기" id="btn-add" class="btn btn-outline-success" 
+		onclick="location.href='${pageContext.request.contextPath}/board/boardForm.do'"/>
 	<table id="tbl-board" class="table table-striped table-hover">
 		<tr>
 			<th>번호</th>
@@ -46,6 +47,8 @@ input#btn-add{float:right; margin: 0 0 15px;}
 			</tr>
 		</c:if>
 	</table>
+	<nav>
+		${pagebar}
+	</nav>
 </section> 
-
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

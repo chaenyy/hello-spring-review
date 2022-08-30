@@ -35,11 +35,22 @@
 		<interceptor>
 			<mapping path="/member/memberDetail.do"/>
 			<mapping path="/member/memberUpdate.do"/>
+			<mapping path="/board/**"/>
+			<exclude-mapping path="/board/boardList.do"/>
 			<beans:bean id="loginInterceptor" class="com.ce.spring2.common.interceptor.LoginInterceptor"></beans:bean>
 		</interceptor>
 	</interceptors>
 	
 	<!-- #9.1 aop관련 어노테이션 등록처리 -->
 	<aop:aspectj-autoproxy />
+	
+	<!-- #10.1 multipartResolver 등록 -->
+	<!-- 작성된 내용이 multipart이고 파일이 전송되었다면 그걸 먼저 읽어서 자바메모리상에 올려놓음! -->
+	<!-- 용량을 적지 않으면 무제한 제공 => 서버 터짐! -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="52428800"></beans:property> <!-- 50mb 한건의 파일요청 시 첨부할 파일들의 총 용량 -->
+		<beans:property name="maxUploadSizePerFile" value="10245760"></beans:property> <!-- 10mb 한 건의 파일 당 용량 -->
+		<beans:property name="maxInMemorySize" value="10240"></beans:property> <!-- 10kb 이상이면 임시파일을 생성해서 관리 -->
+	</beans:bean>
 	
 </beans:beans>
