@@ -207,3 +207,5 @@ select * from board order by no desc;
 select * from attachment order by no desc;
 
 select b.*, (select count(*) from attachment where board_no = b.no) attach_count from board b order by no desc;
+
+create table category_

@@ -24,7 +24,7 @@ public interface BoardDao {
 	@SelectKey(statement = "select seq_board_no.currval from dual", before = false, keyProperty = "no", resultType = int.class)
 	int insertBoard(Board board);
 
-	@Insert("insert into attachment values(seq_attachment_no.nextval, #{boardNo}, #{originalFilename}, #{renamedFilename}, default, default)")
+	@Insert("insert into attachmentttttt values(seq_attachment_no.nextval, #{boardNo}, #{originalFilename}, #{renamedFilename}, default, default)")
 	int insertAttachment(Attachment attach);
 	
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ce.spring2.board.model.dao.BoardDao;
 import com.ce.spring2.board.model.dto.Attachment;
@@ -13,6 +14,8 @@ import com.ce.spring2.board.model.dto.Board;
 
 import lombok.extern.slf4j.Slf4j;
 
+// 기본값이 RuntimeException
+@Transactional(rollbackFor = Exception.class)
 @Service
 @Slf4j
 public class BoardServiceImpl implements BoardService {
