@@ -8,14 +8,20 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -37,6 +43,9 @@ public class BoardController {
 	// spring의 빈으로 등록 되어있음
 	@Autowired
 	ServletContext application;
+	
+	@Autowired
+	ResourceLoader resourceLoader;
 	
 	@RequestMapping("/boardList.do")
 	public void boardList(@RequestParam(defaultValue = "1") int cPage, Model model, HttpServletRequest request) {
@@ -89,5 +98,110 @@ public class BoardController {
 		redirectAttr.addFlashAttribute("msg", "게시글을 성공적으로 등록했습니다.");
 		
 		return "redirect:/board/boardList.do";
+	}
+	
+	@GetMapping("/boardDetail.do")
+	public void boardDetail(@RequestParam int no, Model model) {
+		Board board = boardService.selectOneBoard(no);
+		log.debug("board = {}", board);
+		model.addAttribute("board", board);
+	}
+	
+	/**
+	 * Resource 
+	 * 다음 구현체들의 추상화레이어를 제공
+	 * 
+	 * 웹상 자원 : UrlResource
+	 * classpath 자원 : ClassPathResource
+	 * 서버컴퓨터 자원 : FileSystemResource
+	 * ServletContext (web root) 자원 : SerlvetContextResource
+	 * 입출력 자원 : InputStreamResource
+	 * 이진데이터 자원 : ByteArrayResource  
+	 * 
+	 * file: -> 프로토콜 접두사를 사용하면 FileSystemResource 실행!!
+	 * @throws IOException 
+	 *  
+	 * @ResponseBody
+	 * - 핸들러의 반환된 자바객체를 응답메세지 바디에 직접 출력하는 경우
+	 *  
+	 */
+	// produces : 핸들러가 어떤 것을 생성하는 지 명시해줌
+	@GetMapping(path = "/fileDownload.do", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	// 이진데이터가 작성된 응답이 올 것을 기대하고 브라우저는 그것을 읽어서 본인 컴퓨터에 저장!!
+	@ResponseBody
+	public Resource fileDownload(@RequestParam int no, HttpServletResponse response) throws IOException {
+		Attachment attach = boardService.selectOneAttachment(no);
+		log.debug("attach = {}", attach);
+		
+		String saveDirectory = application.getRealPath("/resources/upload/board");
+		File downFile = new File(saveDirectory, attach.getRenamedFilename());
+		String location = "file:" + downFile;	// File#toString은 파일의 절대경로를 반환
+		log.debug("location = {}", location);
+		Resource resource = resourceLoader.getResource(location); // 해당 자원에 대한 실제 구현체를 만들어서 반환!
+		log.debug("resource = {}", resource);
+		log.debug("resource#file = {}", resource.getFile());
+		
+		// 응답헤더 작성
+		response.setContentType("application/octet-stream; charset=utf-8"); // 이진데이터 임을 명시
+		String filename = new String(attach.getOriginalFilename().getBytes("utf-8"), "iso-8859-1");
+		response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename +"\"");
+		
+		return resource;
+	}
+	
+	@GetMapping("/boardUpdate.do")
+	public void boardUpdate(@RequestParam int no, Model model) {
+		Board board = boardService.selectOneBoard(no);
+		model.addAttribute("board", board);
+	}
+	
+	/**
+	 * - 게시글 수정
+	 * - 첨부파일 삭제 (파일삭제 && attachment row 제거)
+	 * - 첨부파일 추가
+	 * @throws IOException 
+	 * @throws IllegalStateException 
+	 * 
+	 */
+	@PostMapping("/boardUpdate.do")
+	public String boardUpdate(Board board, @RequestParam(name = "delFile", required = false) int[] delFiles, @RequestParam(name = "upFile", required = false) List<MultipartFile> upFileList, RedirectAttributes redirectAttr) throws IllegalStateException, IOException {
+		String saveDirectory = application.getRealPath("/resources/upload/board");
+		int result = 0;
+		
+		// 1. 첨부파일 삭제
+		if(delFiles != null) {
+			for(int attachNo : delFiles) {				
+				// 서버에 저장된 파일 삭제
+				Attachment attachment = boardService.selectOneAttachment(attachNo);
+				File delFile = new File(saveDirectory, attachment.getRenamedFilename());
+				boolean deleted = delFile.delete();
+				
+				// DB 레코드 삭제
+//				if(deleted) {
+					result = boardService.deleteAttachment(attachNo);
+//				}
+			}
+		}
+		
+		// 2. 업로드 파일 등록
+		for(MultipartFile upFile : upFileList) {
+			if(!upFile.isEmpty()) {
+				// 서버 컴퓨터 저장
+				String renamedFilename = HelloSpringUtils.getRenamedFilename(upFile.getOriginalFilename());
+				File destFile = new File(saveDirectory, renamedFilename);
+				upFile.transferTo(destFile);
+				
+				// db 저장
+				Attachment attach = new Attachment(upFile.getOriginalFilename(), renamedFilename);
+				attach.setBoardNo(board.getNo());
+				board.add(attach);
+			}
+		}
+		
+		// 3. 게시글 수정
+		result = boardService.updateBoard(board);
+		
+		redirectAttr.addFlashAttribute("msg", "게시글이 수정되었습니다.");
+		return "redirect:/board/boardDetail.do?no=" + board.getNo();
 	}
 }

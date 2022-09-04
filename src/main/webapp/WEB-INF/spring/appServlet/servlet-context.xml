@@ -37,6 +37,8 @@
 			<mapping path="/member/memberUpdate.do"/>
 			<mapping path="/board/**"/>
 			<exclude-mapping path="/board/boardList.do"/>
+			<exclude-mapping path="/board/boardDetail.do"/>
+			<exclude-mapping path="/board/fileDownload.do"/>
 			<beans:bean id="loginInterceptor" class="com.ce.spring2.common.interceptor.LoginInterceptor"></beans:bean>
 		</interceptor>
 	</interceptors>

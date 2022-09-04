@@ -208,4 +208,24 @@ select * from attachment order by no desc;
 
 select b.*, (select count(*) from attachment where board_no = b.no) attach_count from board b order by no desc;
 
-create table category_
+create table category_list (
+    category_id varchar2(200),
+    category_name varchar2(200)
+);
+
+select
+    b.*,
+    m.*,
+    a.no attach_no,
+    a.board_no,
+    a.original_filename,
+    a.renamed_filename,
+    a.download_count,
+    a.created_at
+from
+    board b left join member m
+        on b.member_id = m.member_id
+    left join attachment a  
+        on b.no = a.board_no
+where
+    b.no = 62;

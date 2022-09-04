@@ -54,4 +54,40 @@ public class BoardServiceImpl implements BoardService {
 		}
 		return result;
 	}
+	
+	@Override
+	public Board selectOneBoard(int no) {
+//		Board board = boardDao.selectOntBoard(no);
+//		List<Attachment> attachments = boardDao.selectAttachmentByBoardNo(no);
+//		board.setAttachments(attachments);
+//		
+//		return board;
+		
+		return boardDao.selectOneBoardCollection(no);
+	}
+	
+	@Override
+	public Attachment selectOneAttachment(int no) {
+		return boardDao.selectOneAttachment(no);
+	}
+	
+	@Override
+	public int deleteAttachment(int attachNo) {
+		return boardDao.deleteAttachment(attachNo);
+	}
+	
+	@Override
+	public int updateBoard(Board board) {
+		// 게시글 수정
+		int result = boardDao.updateBoard(board);
+		
+		// Attachment 추가
+		List<Attachment> attachment = board.getAttachments();
+		if(!attachment.isEmpty() && attachment != null) {
+			for(Attachment attach : attachment) {
+				result = boardDao.insertAttachment(attach);
+			}
+		}
+		return result;
+	}
 }
