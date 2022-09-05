@@ -14,12 +14,12 @@
 			<tr>
 				<th>아이디</th>
 				<td>
-					<input type="text" 
-						   class="form-control" 
-						   placeholder="4글자이상"
-						   name="memberId" 
-						   id="memberId"
-						   required>
+			        <div id="memberId-container">
+			            <input type="text" class="form-control" placeholder="아이디(4글자이상)" name="memberId" id="memberId" required>
+			            <span class="guide ok">이 아이디는 사용가능합니다.</span>
+			            <span class="guide error">이 아이디는 사용할 수 없습니다.</span>
+			            <input type="hidden" id="idValid" value="0"/> <!-- 사용불가한 아이디인 경우 0 | 사용가능한 아이디인 경우 1 -->
+			        </div>
 				</td>
 			</tr>
 			<tr>
@@ -92,4 +92,49 @@
 		<input type="reset" value="취소">
 	</form>
 </div>
+<script>
+const ok = document.querySelector(".guide.ok");
+const error = document.querySelector(".guide.error");
+const idValid = document.querySelector("#idValid");
+
+document.querySelector("#memberId").addEventListener('keyup', (e) => {
+	const {value : memberId} = e.target;
+	
+	if(memberId.length < 4) {
+		ok.style.display = "none";
+		error.style.display = "none";
+		idValid.value = "0";
+		return;
+	}
+	
+	$.ajax({
+		url : "${pageContext.request.contextPath}/member/checkIdDuplicate.do",
+		data : {memberId},
+		success(response) {
+			const {available} = response
+			
+			if(available) {
+				ok.style.display = "inline";
+				error.style.display = "none";
+				idValid.value = "1";
+			} else {
+				ok.style.display = "none";
+				error.style.display = "inline";
+				idValid.value = "0";
+			}
+		},
+		error(jqxhr, statusText, err) {
+			console.log(jqxhr, statusText, err);
+		}
+	});
+});
+
+document.memberEnrollFrm.addEventListener('submit', (e) => {
+	if(idValid.value == "0") {
+		e.preventDefault();
+		alert("유효한 아이디를 입력해주세요.");
+		return;
+	}
+});
+</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

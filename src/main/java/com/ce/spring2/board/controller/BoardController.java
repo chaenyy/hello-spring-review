@@ -164,7 +164,7 @@ public class BoardController {
 	 * 
 	 */
 	@PostMapping("/boardUpdate.do")
-	public String boardUpdate(Board board, @RequestParam(name = "delFile", required = false) int[] delFiles, @RequestParam(name = "upFile", required = false) List<MultipartFile> upFileList, RedirectAttributes redirectAttr) throws IllegalStateException, IOException {
+	public String boardUpdate(Board board, @RequestParam(name = "delFile", required = false) int[] delFiles, @RequestParam(name = "upFile") List<MultipartFile> upFileList, RedirectAttributes redirectAttr) throws IllegalStateException, IOException {
 		String saveDirectory = application.getRealPath("/resources/upload/board");
 		int result = 0;
 		

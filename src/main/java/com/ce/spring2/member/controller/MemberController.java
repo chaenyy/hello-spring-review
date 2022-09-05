@@ -185,6 +185,22 @@ public class MemberController {
 		
 		return "redirect:/member/memberDetail.do";
 	}
+	
+	/**
+	 * jsonView 빈을 통해 ajax 응답하기
+	 * - model에 담긴 속성을 json 문자열로 변환해서 응답메세지 body에 출력
+	 * - BeanNameViewResolver를 통해서 viewName에 해당하는 빈을 찾는다
+	 */
+	@GetMapping("/checkIdDuplicate.do")
+	public String checkIdDuplicate(@RequestParam String memberId, Model model) {
+		Member member = memberService.selectOneMember(memberId);
+		boolean available = member == null;
+		
+		model.addAttribute("memberId", memberId);
+		model.addAttribute("available", available);
+		
+		return "jsonView";
+	}
 }
 
 

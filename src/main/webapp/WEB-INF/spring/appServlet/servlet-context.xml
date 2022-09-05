@@ -56,4 +56,13 @@
 		<beans:property name="maxInMemorySize" value="10240"></beans:property> <!-- 10kb 이상이면 임시파일을 생성해서 관리 -->
 	</beans:bean>
 	
+	<!-- #12.1 jsonView 빈 등록 -->
+	<beans:bean id="jsonView" class="net.sf.json.spring.web.servlet.view.JsonView">
+		<beans:property name="contentType" value="application/json; charset=utf-8"/>
+	</beans:bean>
+	
+	<!-- #12.2 BeanNameViewResolver viewName에 해당하는 빈을 view로 연결하는 resolver -->
+	<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<beans:property name="order" value="1" />
+	</beans:bean>
 </beans:beans>
