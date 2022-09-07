@@ -5,6 +5,8 @@
 <mapper namespace="com.ce.spring2.demo.model.dao.DemoDao">
 	<insert id="insertDev">
 		insert into dev values(seq_dev_no.nextval, #{name}, #{career}, #{email}, #{gender}, #{lang}, default)
+		
+		<selectKey order="AFTER" resultType="_int" keyProperty="no">select seq_dev_no.currval from dual</selectKey>
 	</insert>
 	
 	<select id="selectDev" resultMap="devMap">
@@ -23,7 +25,33 @@
 		update dev set name = #{name}, career = #{career}, email = #{email}, gender = #{gender}, lang = #{lang} where no = #{no}
 	</update>
 	
+	<!-- set태그는 set구문 마지막의 ,를 제거 -->
+	<update id="updatePartialDev">
+		update 
+			dev 
+		<set>
+			<if test="name != null and name != ''">			
+				name = #{name}, 
+			</if>
+			<if test="career != null and career != 0">	
+				career = #{career},
+			</if> 
+			<if test="email != null and email != ''">	
+				email = #{email},
+			</if> 
+			<if test="gender != null and gender != ''">	
+				gender = #{gender},
+			</if> 
+			<if test="lang != null">	
+				lang = #{lang} 
+			</if>
+		</set>
+		where 
+			no = #{no}
+	</update>
+		
 	<delete id="deleteDev">
 		delete from dev where no = #{no}
 	</delete>
+
 </mapper>

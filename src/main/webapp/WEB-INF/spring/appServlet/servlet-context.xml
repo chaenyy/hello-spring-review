@@ -65,4 +65,7 @@
 	<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
 		<beans:property name="order" value="1" />
 	</beans:bean>
+	
+	<!-- #13.1 jackson message converter bean 등록 --> <!-- 핸들러의 리턴 값이 viewName이 아닌 객체가 리턴 되었을 때 json으로 변환해줌 -->
+	<beans:bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
 </beans:beans>

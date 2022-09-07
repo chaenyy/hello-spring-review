@@ -111,6 +111,7 @@ document.querySelector("#memberId").addEventListener('keyup', (e) => {
 		url : "${pageContext.request.contextPath}/member/checkIdDuplicate.do",
 		data : {memberId},
 		success(response) {
+			console.log(response);
 			const {available} = response
 			
 			if(available) {

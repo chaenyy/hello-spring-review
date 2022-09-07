@@ -1,6 +1,11 @@
 package com.ce.spring2.member.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
@@ -191,8 +197,8 @@ public class MemberController {
 	 * - model에 담긴 속성을 json 문자열로 변환해서 응답메세지 body에 출력
 	 * - BeanNameViewResolver를 통해서 viewName에 해당하는 빈을 찾는다
 	 */
-	@GetMapping("/checkIdDuplicate.do")
-	public String checkIdDuplicate(@RequestParam String memberId, Model model) {
+	//@GetMapping("/checkIdDuplicate.do")
+	public String checkIdDuplicate1(@RequestParam String memberId, Model model) {
 		Member member = memberService.selectOneMember(memberId);
 		boolean available = member == null;
 		
@@ -200,6 +206,44 @@ public class MemberController {
 		model.addAttribute("available", available);
 		
 		return "jsonView";
+	}
+	
+	/**
+	 * Jackson
+	 * - MessageConverter에 의해 리턴객체를 json으로 변환
+	 * 
+	 *  @ResponseBody
+	 *  - 핸들러의 리턴 객체를 응답메세지 body에 작성
+	 */
+	//@GetMapping("/checkIdDuplicate.do")
+	@ResponseBody
+	public Map<String, Object> checkIdDuplicate2(@RequestParam String memberId, Model model) {
+		Member member = memberService.selectOneMember(memberId);
+		boolean available = member == null;
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("memberId", memberId);
+		map.put("available", available);
+		
+		return map;
+	}
+	
+	/**
+	 * ResponseEntity
+	 * - @ResponseBody 기능
+	 * - 핸들러에서 응답코드, 응답헤더, 메세지바디를 자유롭게 제어할 수 있도록 도와주는 객체
+	 * - 메세지바디에 작성할 자바객체는 messageConverter에 의해 json으로 처리
+	 */
+	@GetMapping("/checkIdDuplicate.do")
+	public ResponseEntity<?> checkIdDuplicate3(@RequestParam String memberId, Model model) {
+		Member member = memberService.selectOneMember(memberId);
+		boolean available = member == null;
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("memberId", memberId);
+		map.put("available", available);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(map);
 	}
 }
 
