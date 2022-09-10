@@ -34,7 +34,7 @@
 	</bean>
 	
 	<!-- #6.3 @Mapper 인터페이스 등록 : Dao 구현 객체를 동적으로 생성 -->
-	<mybatis-spring:scan base-package="com.ce.spring2.**.dao"/>
+	<mybatis-spring:scan base-package="com.ce.**.dao"/>
 	
 	<!-- #11.1 트랜잭션 매니저 빈 등록 (트랜잭션 처리) -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

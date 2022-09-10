@@ -86,7 +86,7 @@ import lombok.extern.slf4j.Slf4j;
  * </pre>
  * 
  */
-@Controller
+//@Controller
 @RequestMapping("/member")
 @Slf4j
 @SessionAttributes({"loginMember"})
