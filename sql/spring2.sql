@@ -229,6 +229,8 @@ from
         on b.no = a.board_no
 where
     b.no = 62;
-    393 715
+
 select * from board;
 select * from attachment;
+
+select * from member;

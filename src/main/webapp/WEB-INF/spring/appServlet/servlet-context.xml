@@ -32,6 +32,7 @@
 			<beans:bean id="logInterceptor" class="com.ce.spring2.common.interceptor.LogInterceptor"></beans:bean>
 		</interceptor>
 		
+		<!-- 
 		<interceptor>
 			<mapping path="/member/memberDetail.do"/>
 			<mapping path="/member/memberUpdate.do"/>
@@ -40,7 +41,8 @@
 			<exclude-mapping path="/board/boardDetail.do"/>
 			<exclude-mapping path="/board/fileDownload.do"/>
 			<beans:bean id="loginInterceptor" class="com.ce.spring2.common.interceptor.LoginInterceptor"></beans:bean>
-		</interceptor>
+		</interceptor> 
+		-->
 	</interceptors>
 	
 	<!-- #9.1 aop관련 어노테이션 등록처리 -->

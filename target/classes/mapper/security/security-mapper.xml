@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ce.security.model.dao.MemberSecurityDao">
+  <select id="loadUserByUsername" resultMap="memberAutoMap">
+  	select
+  		*
+  	from
+  		member
+  	where
+  		member_id = #{username}
+  </select>
+  <resultMap type="member" id="memberAutoMap">
+  	<id column="member_id" property="memberId"/>
+  	<collection property="authorities"
+  				javaType="arraylist"
+  				column="member_id"
+  				ofType="simpleGrantedAuthority"
+  				select="selectAuthorities" />
+  				 <!-- member_id값을 가지고 가서 selectAuthorities 쿼리 실행! -->
+  </resultMap>
+  
+  <select id="selectAuthorities" resultMap="simpleGrantedAuthorityMap">
+  	select
+  		*
+  	from
+  		authority
+  	where
+  		member_id = #{memberId}
+  </select>
+  <!-- property 방식이 아닌 생성자를 이용해 대입! (setter가 없음) -->
+  <resultMap type="simpleGrantedAuthority" id="simpleGrantedAuthorityMap">
+  	<constructor>
+  		<!-- auth컬럼을 가져와 생성자에 대입! (타입은 string) -->
+  		<arg column="auth" javaType="string"/>
+  	</constructor>
+  </resultMap>
+</mapper>

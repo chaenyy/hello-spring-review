@@ -5,6 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -78,7 +79,10 @@
 			    		</a>님, 안녕하세요😊
 			    	</span>
 			    	&nbsp;
-	                <button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick="location.href='${pageContext.request.contextPath}/member/memberLogout.do';">로그아웃</button>			    
+			    	<form action="${pageContext.request.contextPath}/member/memberLogout.do" method="post">			    	
+		                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" >로그아웃</button>
+		                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />			    
+			    	</form>
 			    </sec:authorize>
 			 </div>
 		</nav>​
