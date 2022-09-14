@@ -234,3 +234,24 @@ select * from board;
 select * from attachment;
 
 select * from member;
+
+-- security 관련 테이블 작성
+-- authority
+create table authority(
+    member_id varchar2(20),
+    auth varchar2(50),
+    constraint pk_authority primary key (member_id, auth),
+    constraint fk_authority_member_id foreign key(member_id) references member(member_id) on delete cascade
+);
+
+insert into authority values('abcde', 'ROLE_USER');
+insert into authority values('abcdef', 'ROLE_USER');
+insert into authority values('abcdefe', 'ROLE_USER');
+insert into authority values('qwerty', 'ROLE_USER');
+insert into authority values('honggd', 'ROLE_USER');
+insert into authority values('admin', 'ROLE_USER');
+insert into authority values('admin', 'ROLE_ADMIN');
+commit;
+
+select * from authority;
+delete from authority where member_id = 'abcde' and auth = 'ROLE_ADMIN';

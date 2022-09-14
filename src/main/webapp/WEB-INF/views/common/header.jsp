@@ -29,6 +29,12 @@
 </script>
 </c:if>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js" integrity="sha512-1QvjE7BtotQjkq8PxLeF6P46gEpBRXuskzIVgjFpekzFVF4yjRgrQvTG1MTOJ3yQgvTteKAcO7DSZI92+u/yZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- 로그인 했을 때만 웹 소켓 연결! -->
+<sec:authorize access="isAuthenticated()">
+	<script src="${pageContext.request.contextPath}/resources/js/ws.js"></script>
+</sec:authorize>
 </head>
 <body>
 <div id="container">
@@ -60,6 +66,8 @@
                         </div>
 				    </li>
 				    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/todo/todoList.do">Todo</a></li>
+				    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/ws/ws.do">ws | sockjs</a></li>
+				    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/ws/stomp.do">stomp</a></li>
 				    <sec:authorize access="hasRole('ADMIN')">
 					    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/admin/memberList.do">관리자</a></li>
 				    </sec:authorize>
