@@ -33,6 +33,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <!-- 로그인 했을 때만 웹 소켓 연결! -->
 <sec:authorize access="isAuthenticated()">
+	<script>
+	const memberId = "<sec:authentication property='principal.username'/>";
+	</script>
 	<script src="${pageContext.request.contextPath}/resources/js/ws.js"></script>
 </sec:authorize>
 </head>

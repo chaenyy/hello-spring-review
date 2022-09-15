@@ -29,6 +29,7 @@ import com.ce.spring2.board.model.dto.Attachment;
 import com.ce.spring2.board.model.dto.Board;
 import com.ce.spring2.board.model.service.BoardService;
 import com.ce.spring2.common.HelloSpringUtils;
+import com.ce.spring2.ws.model.service.NoticeService;
 
 import lombok.extern.slf4j.Slf4j;
 import oracle.jdbc.proxy.annotation.Post;
@@ -46,6 +47,9 @@ public class BoardController {
 	
 	@Autowired
 	ResourceLoader resourceLoader;
+	
+	@Autowired
+	NoticeService noticeService;
 	
 	@RequestMapping("/boardList.do")
 	public void boardList(@RequestParam(defaultValue = "1") int cPage, Model model, HttpServletRequest request) {
@@ -104,6 +108,7 @@ public class BoardController {
 	public void boardDetail(@RequestParam int no, Model model) {
 		Board board = boardService.selectOneBoard(no);
 		log.debug("board = {}", board);
+		noticeService.sendNotice(board);
 		model.addAttribute("board", board);
 	}
 	

@@ -3,12 +3,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param name="title" value="관리자 회원 관리" />
 </jsp:include>
 
-<div>관리자 회원관리 페이지입니다. 이 페이지를 볼 수 있는 당신은 관리자!!</div>
+<div class="text-center">관리자 회원관리 페이지입니다. 이 페이지를 볼 수 있는 당신은 관리자!!</div>
     <div class="w-75 mx-auto">
         <button 
             type="button" 
@@ -45,4 +46,26 @@
         </div>
       </div>
     </div>
+<script>
+document.querySelector("#adminNoticeSendBtn").addEventListener('click', (e) => {
+	const to = document.querySelector("#send-to-name").value;
+	const msg = document.querySelector("#message-text").value;
+	if(!msg) return;
+	
+	const payload = {
+		from : '<sec:authentication property="principal.username"/>',
+		to,
+		msg,
+		time : Date.now(),
+		type : 'NOTICE'
+	};
+	
+	const url = to ? `/app/admin/notice/\${to}` : '/app/admin/notice';
+	stompClient.send(url, null, JSON.stringify(payload)); // 텍스트 기반으로 송부!(객체론 안됨)
+	document.adminNoticeFrm.reset();
+	
+	// 모달 숨기기
+	$("#adminNoticeModal").modal('hide');	
+});
+</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
