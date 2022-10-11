@@ -71,8 +71,12 @@
 				    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/todo/todoList.do">Todo</a></li>
 				    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/ws/ws.do">ws | sockjs</a></li>
 				    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/ws/stomp.do">stomp</a></li>
+				    <sec:authorize access="isAuthenticated() && !hasRole('ADMIN')">
+					    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/chat/chat.do">관리자와 1:1 채팅</a></li>
+				    </sec:authorize>
 				    <sec:authorize access="hasRole('ADMIN')">
 					    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/admin/memberList.do">관리자</a></li>
+					    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/admin/chatList.do">채팅목록</a></li>
 				    </sec:authorize>
 			    </ul>
 			    <!-- 권한체크 -->
